@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Lista de la compra</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_exit">Salir</string>
+    <string name="come_back">¡Hasta pronto!</string>
+    <!-- About activity -->
+    <string name="developed_by">Aplicación desarrollada por Carles Pérez Revert</string>
+    <string name="upv">Universitat Politècnica de València (UPV)</string>
+    <!-- New lista activity -->
+    <string name="new_list">Nueva lista</string>
+    <string name="list_name">Introduzca un nombre para la lista</string>
+    <string name="label_shopping_list">Lista de la compra:</string>
+    <string name="input_shopping_list">Introduzca aquí la lista de la compra</string>
+    <string name="save">Guardar</string>
+</resources>
