@@ -17,8 +17,6 @@ class NewListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_list)
-
-        this.cargarFichero()
     }
 
     fun onCancel(view: View) {
@@ -28,17 +26,16 @@ class NewListActivity : AppCompatActivity() {
     fun onSave(view: View) {
         this.crearFichero()
         onBackPressed()
-//        toast("Guardado (pendiente de traducción)")
     }
 
     fun crearFichero() {
         var fos: FileOutputStream
 
         try {
-            fos = openFileOutput("fichero.txt", Context.MODE_PRIVATE)
+            fos = openFileOutput(listName.text.toString() + ".txt", Context.MODE_PRIVATE)
             fos.write(shoppingList.text.toString().toByteArray())
             fos.close()
-            toast("Fichero creado correctamente")
+            toast("Lista creada correctamente")
         } catch (e: FileNotFoundException) {
             toast("File not found exception")
         } catch (e: IOException) {
@@ -46,19 +43,19 @@ class NewListActivity : AppCompatActivity() {
         }
     }
 
-    fun cargarFichero() {
-
-        var fis: FileInputStream
-        try {
-            fis = openFileInput("fichero.txt")
-            fis.bufferedReader().use { shoppingList.setText(it.readText()) }
-            fis.close()
-            val files = fileList()
-            files.forEach {
-                toast(it.toString())
-            }
-        } catch (e: Exception) {
-            toast("Se ha producido un error")
-        }
-    }
+//    fun cargarFichero() {
+//
+//        var fis: FileInputStream
+//        try {
+//            fis = openFileInput("fichero.txt")
+//            fis.bufferedReader().use { shoppingList.setText(it.readText()) }
+//            fis.close()
+//            val files = fileList()
+//            files.forEach {
+//                toast(it.toString())
+//            }
+//        } catch (e: Exception) {
+//            toast("Se ha producido un error")
+//        }
+//    }
 }

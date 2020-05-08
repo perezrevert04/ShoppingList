@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,19 +22,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapter(arrayOf("Hola", "buenas", "que", "tal"))
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
-            // use a linear layout manager
-            layoutManager = viewManager
-            // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-        }
+        this.prepareRecyclerView()
 
         fab.setOnClickListener { view -> startActivity( Intent(this, NewListActivity::class.java) ) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.prepareRecyclerView()
     }
 
 
@@ -52,6 +47,29 @@ class MainActivity : AppCompatActivity() {
     fun onExit(item: MenuItem) {
         toast(R.string.come_back)
         finishAffinity()
+    }
+
+    private fun prepareRecyclerView() {
+        val files = fileList()
+        files.sort()
+
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
+
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+            // use a linear layout manager
+            layoutManager = viewManager
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+        }
+
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+
+
     }
 
 }
