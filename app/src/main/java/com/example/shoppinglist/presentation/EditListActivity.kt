@@ -32,7 +32,7 @@ class EditListActivity : AppCompatActivity() {
 
         var fis: FileInputStream
         try {
-            fis = openFileInput("fichero.txt")
+            fis = openFileInput(filename)
             fis.bufferedReader().use { shoppingList.setText(it.readText()) }
             fis.close()
 
