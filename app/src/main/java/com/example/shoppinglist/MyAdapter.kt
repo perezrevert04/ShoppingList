@@ -1,12 +1,15 @@
 package com.example.shoppinglist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.element_list.view.*
 
 class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    lateinit var onClick: (View) -> Unit
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -29,6 +32,7 @@ class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAd
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textView.text_view.text = myDataset[position]
+        holder.textView.setOnClickListener { onClick(holder.itemView) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

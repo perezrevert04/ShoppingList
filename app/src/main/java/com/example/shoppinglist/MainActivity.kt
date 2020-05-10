@@ -13,9 +13,11 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
+
+    val viewAdapter by lazy { (application as Global).viewAdapter }
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
+//    private lateinit var viewAdapter: RecyclerView.Adapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,17 +68,21 @@ class MainActivity : AppCompatActivity() {
         val files = fileList()
         files.sort()
 
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
+//        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
             // use a linear layout manager
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(this@MainActivity)
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
+        }
+
+        viewAdapter.onClick = {
+            val pos = recyclerView.getChildAdapterPosition(it)
+            toast(pos)
         }
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
