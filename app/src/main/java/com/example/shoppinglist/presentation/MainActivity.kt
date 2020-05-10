@@ -1,4 +1,4 @@
-package com.example.shoppinglist
+package com.example.shoppinglist.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,16 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shoppinglist.Global
+import com.example.shoppinglist.R
+import com.example.shoppinglist.use_case.ShowListUseCase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.element_list.view.*
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
 
     val viewAdapter by lazy { (application as Global).viewAdapter }
-
+    val showListUseCase by lazy { ShowListUseCase(this) }
     private lateinit var recyclerView: RecyclerView
-//    private lateinit var viewAdapter: RecyclerView.Adapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,26 +71,18 @@ class MainActivity : AppCompatActivity() {
         val files = fileList()
         files.sort()
 
-//        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
-
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-            // use a linear layout manager
             layoutManager = LinearLayoutManager(this@MainActivity)
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
         }
 
         viewAdapter.onClick = {
-            val pos = recyclerView.getChildAdapterPosition(it)
-            toast(pos)
+            showListUseCase.showList(it.text_view.text.toString())
         }
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(dividerItemDecoration)
-
 
     }
 
