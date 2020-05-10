@@ -34,19 +34,32 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
-    fun onAbout(item: MenuItem) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                onAbout()
+                true
+            }
+            R.id.action_exit -> {
+                onExit()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun onAbout() {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
     }
 
-    fun onExit(item: MenuItem) {
+    fun onExit() {
         toast(R.string.come_back)
-        finishAffinity()
+        finish()
     }
 
     private fun prepareRecyclerView() {
