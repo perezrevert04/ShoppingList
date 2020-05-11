@@ -28,7 +28,7 @@ class EditListActivity : AppCompatActivity() {
     }
 
     private fun getFile() {
-        filename = intent.getStringExtra("name") ?: "list"
+        filename = (intent.getStringExtra("name") ?: "list") + ".txt"
 
         val fis: FileInputStream
         try {

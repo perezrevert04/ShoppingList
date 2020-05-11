@@ -2,14 +2,12 @@ package com.example.shoppinglist.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shoppinglist.Global
 import com.example.shoppinglist.R
 import com.example.shoppinglist.use_case.ShowListUseCase
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +16,6 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
-//    private val viewAdapter by lazy { (application as Global).viewAdapter }
     lateinit var viewAdapter: MyAdapter
     private val showListUseCase by lazy { ShowListUseCase(this) }
     private lateinit var recyclerView: RecyclerView
@@ -28,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        viewAdapter = MyAdapter(fileList().toList())
         this.prepareRecyclerView()
 
         fab.setOnClickListener { view -> startActivity( Intent(this, NewListActivity::class.java) ) }
@@ -36,7 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewAdapter = MyAdapter(fileList().toList())
         this.prepareRecyclerView()
     }
 
@@ -70,8 +65,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareRecyclerView() {
-        val files = fileList()
-        files.sort()
+        val files = fileList(); files.sort()
+
+        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
