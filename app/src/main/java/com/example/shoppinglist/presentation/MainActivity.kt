@@ -2,6 +2,7 @@ package com.example.shoppinglist.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,9 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
-
-    val viewAdapter by lazy { (application as Global).viewAdapter }
-    val showListUseCase by lazy { ShowListUseCase(this) }
+//    private val viewAdapter by lazy { (application as Global).viewAdapter }
+    lateinit var viewAdapter: MyAdapter
+    private val showListUseCase by lazy { ShowListUseCase(this) }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        viewAdapter = MyAdapter(fileList().toList())
         this.prepareRecyclerView()
 
         fab.setOnClickListener { view -> startActivity( Intent(this, NewListActivity::class.java) ) }
@@ -34,9 +36,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewAdapter = MyAdapter(fileList().toList())
         this.prepareRecyclerView()
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -57,12 +59,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onAbout() {
+    private fun onAbout() {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
     }
 
-    fun onExit() {
+    private fun onExit() {
         toast(R.string.come_back)
         finish()
     }

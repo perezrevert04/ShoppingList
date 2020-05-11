@@ -1,5 +1,6 @@
 package com.example.shoppinglist.presentation
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAd
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        Log.d("onBindViewHolder", position.toString())
         holder.textView.text_view.text = myDataset[position]
         holder.textView.setOnClickListener { onClick(holder.itemView) }
     }

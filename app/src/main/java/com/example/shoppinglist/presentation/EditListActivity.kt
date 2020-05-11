@@ -30,7 +30,7 @@ class EditListActivity : AppCompatActivity() {
     private fun getFile() {
         filename = intent.getStringExtra("name") ?: "list"
 
-        var fis: FileInputStream
+        val fis: FileInputStream
         try {
             fis = openFileInput(filename)
             fis.bufferedReader().use { shoppingList.setText(it.readText()) }
@@ -47,7 +47,7 @@ class EditListActivity : AppCompatActivity() {
     }
 
     private fun saveFile() {
-        var fos: FileOutputStream
+        val fos: FileOutputStream
 
         try {
             val newName = listName.text.toString() + ".txt"
