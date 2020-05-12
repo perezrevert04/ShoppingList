@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.element_list.view.*
 class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     lateinit var onClick: (View) -> Unit
+    lateinit var onLongClick: (View) -> Unit
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -26,9 +27,7 @@ class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAd
             .inflate(R.layout.element_list, parent, false) as ConstraintLayout
         // set the view's size, margins, paddings and layout parameters
 
-        return MyViewHolder(
-            textView
-        )
+        return MyViewHolder(textView)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -38,6 +37,7 @@ class MyAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<MyAd
         Log.d("onBindViewHolder", position.toString())
         holder.textView.text_view.text = myDataset[position]
         holder.textView.setOnClickListener { onClick(holder.itemView) }
+        holder.textView.setOnLongClickListener { onLongClick(holder.itemView); true }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

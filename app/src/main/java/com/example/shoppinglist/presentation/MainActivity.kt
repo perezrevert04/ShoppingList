@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.use_case.ShowListUseCase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_new_list.*
 import kotlinx.android.synthetic.main.element_list.view.*
 import org.jetbrains.anko.toast
+import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
 
@@ -75,13 +80,40 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        viewAdapter.onClick = {
-            showListUseCase.showList(it.text_view.text.toString())
-        }
+        viewAdapter.onClick = { showListUseCase.showList(it.text_view.text.toString()) }
+
+        viewAdapter.onLongClick = { showAlert(it.text_view.text.toString()) }
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(dividerItemDecoration)
 
+    }
+
+    private fun showAlert(listName: String) {
+        val filename = "$listName.txt"
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle( listName ).setMessage( R.string.dialog_message )
+
+        val fis: FileInputStream
+        try {
+            fis = openFileInput(filename)
+            fis.bufferedReader().use { builder.setMessage(it.readText()) }
+            fis.close()
+        } catch (e: Exception) {
+
+        }
+
+
+        builder.setNeutralButton(R.string.close) { _, _ -> }
+
+        builder.setNegativeButton(R.string.delete){ _, _ ->
+            val result = deleteFile(filename)
+            if (result) prepareRecyclerView()
+        }
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 
 }

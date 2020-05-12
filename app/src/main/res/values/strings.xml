@@ -10,6 +10,11 @@
     <string name="new_list">New list</string>
     <string name="list_name">Enter a name for your list</string>
     <string name="label_shopping_list">Shopping list:</string>
-    <string name="input_shopping_list">Introduzca aquí la lista de la compra</string>
+    <string name="input_shopping_list">Enter your shopping list here</string>
     <string name="save">Save</string>
+    <!-- Dialog -->
+    <string name="dialog_title">Dialog title</string>
+    <string name="dialog_message">Dialog message</string>
+    <string name="close">Close</string>
+    <string name="delete">Delete</string>
 </resources>
