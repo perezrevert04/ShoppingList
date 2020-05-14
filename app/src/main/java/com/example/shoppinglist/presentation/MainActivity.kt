@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.Global
 import com.example.shoppinglist.R
+import com.example.shoppinglist.data.NotesDB
 import com.example.shoppinglist.use_case.NotesUseCase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.element_list.view.*
 import org.jetbrains.anko.toast
 import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
 
-//    lateinit var viewAdapter: MyAdapter
+    private val shoppingNotes: NotesDB by lazy { (application as Global).shoppingNotes }
     private val viewAdapter by lazy { (application as Global).adapter }
-    private val showListUseCase by lazy { NotesUseCase(this) }
+    private val showListUseCase by lazy { NotesUseCase(this, shoppingNotes, viewAdapter) }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        this.prepareRecyclerView()
+//        this.prepareRecyclerView()
 
-        fab.setOnClickListener { view -> startActivity( Intent(this, NewListActivity::class.java) ) }
+        fab.setOnClickListener { _ -> startActivity( Intent(this, NewListActivity::class.java) ) }
     }
 
     override fun onResume() {
@@ -72,6 +72,8 @@ class MainActivity : AppCompatActivity() {
     private fun prepareRecyclerView() {
 //        val files = fileList(); files.sort()
 //        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
+        viewAdapter.cursor = shoppingNotes.getCursor()
+        viewAdapter.notifyDataSetChanged()
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
