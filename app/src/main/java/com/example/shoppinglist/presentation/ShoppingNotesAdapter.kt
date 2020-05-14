@@ -21,5 +21,5 @@ class ShoppingNotesAdapter(private val shoppingNotes: NotesDB, var cursor: Curso
         holder.textView.tag = position
     }
 
-    override fun getItemCount(): Int = cursor.count
+    override fun getItemCount(): Int = shoppingNotes.length()
 }

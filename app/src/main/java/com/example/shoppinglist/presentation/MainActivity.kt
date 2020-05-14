@@ -70,11 +70,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareRecyclerView() {
-//        val files = fileList(); files.sort()
-//        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
-        viewAdapter.cursor = shoppingNotes.getCursor()
-        viewAdapter.notifyDataSetChanged()
-
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -83,7 +78,6 @@ class MainActivity : AppCompatActivity() {
 
         viewAdapter.onClick = {
             showListUseCase.showNote(it.tag as Int)
-//            showListUseCase.showList(it.text_view.text.toString())
         }
 
         viewAdapter.onLongClick = { showAlert(it.text_view.text.toString()) }

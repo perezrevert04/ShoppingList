@@ -14,7 +14,6 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
 
 
     override fun onCreate(db: SQLiteDatabase) {
-        Log.d("Database log", "Creando tabla...")
         db.execSQL(
             "CREATE TABLE $TABLE_NAME (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -23,24 +22,25 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
                     "date BIGINT " +
                     ")"
         )
-        Log.d("Database log", "Tabla creada!")
-        Log.d("Database log", "Insertando primer elemento...")
         db.execSQL(
             ("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
                     "'Compra Amazon', " +
                     "'Cable HDMI', " +
                     System.currentTimeMillis() + ")")
         )
-        Log.d("Database log", "Insertando segundo elemento...")
         db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
                 "'Compra viernes', " +
                 "'Cereales, atún y lentejas', " +
                 System.currentTimeMillis() + ")")
         )
-        Log.d("Database log", "Insertando tercer elemento...")
         db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
                 "'Compra papelería', " +
                 "'Post-its y grapas', " +
+                System.currentTimeMillis() + ")")
+        )
+        db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
+                "'Compra para caseta', " +
+                "'Alcohol', " +
                 System.currentTimeMillis() + ")")
         )
     }
@@ -49,20 +49,17 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
 
     override fun element(id: Int): ShoppingNote {
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE _id = $id", null)
-        Log.d("Database log", "cursor count: ${cursor.count}")
-        Log.d("Database log", "cursor == null? ${cursor == null}")
-//        Log.d("Database log", "Cursor move to first: ${cursor.moveToFirst()}")
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE _id = ${id + 1}", null)
+        val c = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
 
+        c.moveToPosition(2)
+        Log.d("Database", c.getString(1))
+        c.close()
         try {
-
-        Log.d("Database log", "Cursor move to next: ${cursor.moveToNext()}")
-            if (cursor.moveToNext()){
-                Log.d("Database log", "Entrando al if cursor.moveToNext()")
-                return getShoppingNote(cursor)}
+            if (cursor.moveToNext())
+                return getShoppingNote(cursor)
             else
-                return ShoppingNote("Title $id", "Content")
-//                throw SQLException("Error when accessing the item _id = $id")
+                throw SQLException("Error accessing the element $id")
 
         } catch (e:Exception) {
             throw e
@@ -84,7 +81,7 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
     }
 
     override fun length(): Int {
-        TODO("Not yet implemented")
+        return getCursor().count
     }
 
     override fun update(id: Int, note: ShoppingNote): Boolean {
