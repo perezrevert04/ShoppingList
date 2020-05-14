@@ -1,8 +1,10 @@
 package com.example.shoppinglist.data
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.shoppinglist.logic.ShoppingNote
 
 class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes", null, 1), NotesDAO {
 
@@ -29,7 +31,7 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
 
-    override fun note(id: Int): ShoppingNote {
+    override fun element(id: Int): ShoppingNote {
         TODO("Not yet implemented")
     }
 
@@ -52,4 +54,12 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
     override fun update(id: Int, note: ShoppingNote): Boolean {
         TODO("Not yet implemented")
     }
+
+    fun getShoppingNote(cursor: Cursor) = ShoppingNote(
+        title = cursor.getString(1),
+        content = cursor.getString(2),
+        date = cursor.getLong(3)
+    )
+
+    fun getCursor(): Cursor = readableDatabase.rawQuery("SELECT * FROM shopping_notes", null)
 }

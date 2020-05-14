@@ -5,11 +5,11 @@ import android.content.Intent
 import com.example.shoppinglist.presentation.AboutActivity
 import com.example.shoppinglist.presentation.EditListActivity
 
-class ShowListUseCase(private val activity: Activity) {
+class NotesUseCase(private val activity: Activity) {
 
-    fun showList(listName: String) {
+    fun showNote(position: Int) {
         val intent = Intent(activity, EditListActivity::class.java)
-        intent.putExtra("name", listName)
+        intent.putExtra("position", position)
         activity.startActivity(intent)
     }
 }

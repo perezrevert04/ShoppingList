@@ -4,25 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shoppinglist.Global
 import com.example.shoppinglist.R
-import com.example.shoppinglist.use_case.ShowListUseCase
+import com.example.shoppinglist.use_case.NotesUseCase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
-import kotlinx.android.synthetic.main.activity_new_list.*
 import kotlinx.android.synthetic.main.element_list.view.*
 import org.jetbrains.anko.toast
 import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewAdapter: MyAdapter
-    private val showListUseCase by lazy { ShowListUseCase(this) }
+//    lateinit var viewAdapter: MyAdapter
+    private val viewAdapter by lazy { (application as Global).adapter }
+    private val showListUseCase by lazy { NotesUseCase(this) }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,9 +70,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareRecyclerView() {
-        val files = fileList(); files.sort()
-
-        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
+//        val files = fileList(); files.sort()
+//        viewAdapter = MyAdapter( files.map { it.dropLast(4) } )
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
@@ -80,7 +79,10 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        viewAdapter.onClick = { showListUseCase.showList(it.text_view.text.toString()) }
+        viewAdapter.onClick = {
+            showListUseCase.showNote(it.tag as Int)
+//            showListUseCase.showList(it.text_view.text.toString())
+        }
 
         viewAdapter.onLongClick = { showAlert(it.text_view.text.toString()) }
 
