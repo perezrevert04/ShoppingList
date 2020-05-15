@@ -14,23 +14,19 @@ import com.example.shoppinglist.R
 import com.example.shoppinglist.data.NotesDB
 import com.example.shoppinglist.use_case.NotesUseCase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.element_list.view.*
 import org.jetbrains.anko.toast
-import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
 
     private val shoppingNotes: NotesDB by lazy { (application as Global).shoppingNotes }
     private val viewAdapter by lazy { (application as Global).adapter }
-    private val showListUseCase by lazy { NotesUseCase(this, shoppingNotes, viewAdapter) }
+    private val notesUseCase by lazy { NotesUseCase(this) }
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-//        this.prepareRecyclerView()
 
         fab.setOnClickListener { _ -> startActivity( Intent(this, NewListActivity::class.java) ) }
     }
@@ -70,6 +66,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareRecyclerView() {
+        viewAdapter.notes = shoppingNotes.all()
+
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -77,36 +75,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewAdapter.onClick = {
-            showListUseCase.showNote(it.tag as Int)
+            notesUseCase.showNote(it.tag as Int)
         }
 
-        viewAdapter.onLongClick = { showAlert(it.text_view.text.toString()) }
+        viewAdapter.onLongClick = {
+            showAlert(it.tag as Int)
+        }
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(dividerItemDecoration)
 
     }
 
-    private fun showAlert(listName: String) {
-        val filename = "$listName.txt"
+    private fun showAlert(id: Int) {
+        val note = shoppingNotes.element(id)
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle( listName ).setMessage( R.string.dialog_message )
-
-        val fis: FileInputStream
-        try {
-            fis = openFileInput(filename)
-            fis.bufferedReader().use { builder.setMessage(it.readText()) }
-            fis.close()
-        } catch (e: Exception) {
-
-        }
-
+        builder.setTitle( note.title ).setMessage( note.content )
 
         builder.setNeutralButton(R.string.close) { _, _ -> }
 
         builder.setNegativeButton(R.string.delete){ _, _ ->
-            val result = deleteFile(filename)
+            val result = shoppingNotes.delete(id)
             if (result) prepareRecyclerView()
         }
 

@@ -4,6 +4,7 @@ import com.example.shoppinglist.logic.ShoppingNote
 
 interface NotesDAO {
 
+    fun all(): List<ShoppingNote>                       // Devuelve todos los elementos
     fun element(id: Int): ShoppingNote                  // Devuelve el elemento dado su id
     fun add(note: ShoppingNote): Boolean                // Añade el elemento indicado
     fun new(): Int                                      // Añade un elemento en blanco y devuelve su id

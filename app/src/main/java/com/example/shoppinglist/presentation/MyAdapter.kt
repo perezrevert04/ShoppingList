@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
-import com.example.shoppinglist.data.NotesDAO
+import com.example.shoppinglist.logic.ShoppingNote
 import kotlinx.android.synthetic.main.element_list.view.*
 
-open class MyAdapter(private val notes: NotesDAO) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+open class MyAdapter(var notes: List<ShoppingNote>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     lateinit var onClick: (View) -> Unit
     lateinit var onLongClick: (View) -> Unit
@@ -22,10 +22,7 @@ open class MyAdapter(private val notes: NotesDAO) : RecyclerView.Adapter<MyAdapt
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        // create a new view
-        val textView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.element_list, parent, false) as ConstraintLayout
-        // set the view's size, margins, paddings and layout parameters
+        val textView = LayoutInflater.from(parent.context).inflate(R.layout.element_list, parent, false) as ConstraintLayout
 
         return MyViewHolder(textView)
     }
@@ -34,12 +31,14 @@ open class MyAdapter(private val notes: NotesDAO) : RecyclerView.Adapter<MyAdapt
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.text_view.text = notes.element(position).title
-        holder.textView.tag = position.toString()
+        val note = notes[position]
+        holder.textView.text_view.text = note.title
+        holder.textView.tag = note.id
+
         holder.textView.setOnClickListener { onClick(holder.itemView) }
         holder.textView.setOnLongClickListener { onLongClick(holder.itemView); true }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = notes.length()
+    override fun getItemCount() = notes.size
 }

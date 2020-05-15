@@ -47,21 +47,24 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) { }
 
+    override fun all(): List<ShoppingNote> {
+        val list: MutableList<ShoppingNote> = ArrayList()
+
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        while (cursor.moveToNext()) list.add( getShoppingNote(cursor) )
+        cursor?.close()
+
+        return list
+    }
+
     override fun element(id: Int): ShoppingNote {
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE _id = ${id + 1}", null)
-        val c = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE _id = $id", null)
 
-        c.moveToPosition(2)
-        Log.d("Database", c.getString(1))
-        c.close()
         try {
-            if (cursor.moveToNext())
-                return getShoppingNote(cursor)
-            else
-                throw SQLException("Error accessing the element $id")
-
-        } catch (e:Exception) {
+            if (cursor.moveToNext()) return getShoppingNote(cursor)
+            else throw SQLException("Error accessing the element $id")
+        } catch (e: Exception) {
             throw e
         } finally {
             cursor?.close()
@@ -77,7 +80,7 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
     }
 
     override fun delete(id: Int): Boolean {
-        TODO("Not yet implemented")
+        return writableDatabase.delete(TABLE_NAME, "_id = $id", null) > 0
     }
 
     override fun length(): Int {
@@ -89,10 +92,13 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
     }
 
     private fun getShoppingNote(cursor: Cursor) = ShoppingNote(
+        id = cursor.getInt(0),
         title = cursor.getString(1),
         content = cursor.getString(2),
         date = cursor.getLong(3)
     )
 
-    fun getCursor(): Cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    private fun getCursor(): Cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+
+    /* TODO: Sustituir readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null) por get Cursor ???? */
 }
