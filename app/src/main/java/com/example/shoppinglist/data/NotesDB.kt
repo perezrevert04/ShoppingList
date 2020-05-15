@@ -41,9 +41,9 @@ class NotesDB(context: Context) : SQLiteOpenHelper(context, "shopping_notes", nu
     override fun all(): List<ShoppingNote> {
         val list: MutableList<ShoppingNote> = ArrayList()
 
-        val cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        val cursor = getCursor()
         while (cursor.moveToNext()) list.add( getShoppingNote(cursor) )
-        cursor?.close()
+        cursor.close()
 
         return list
     }
@@ -99,5 +99,4 @@ class NotesDB(context: Context) : SQLiteOpenHelper(context, "shopping_notes", nu
 
     private fun getCursor(): Cursor = readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
 
-    /* TODO: Sustituir readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null) por get Cursor ???? */
 }
