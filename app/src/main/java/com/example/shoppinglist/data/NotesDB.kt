@@ -1,5 +1,6 @@
 package com.example.shoppinglist.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.SQLException
@@ -88,7 +89,13 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
     }
 
     override fun update(id: Int, note: ShoppingNote): Boolean {
-        TODO("Not yet implemented")
+        val values = ContentValues().apply {
+            put("title", note.title)
+            put("content", note.content)
+            put("date", System.currentTimeMillis())
+        }
+
+        return writableDatabase.update(TABLE_NAME, values, "_id = $id", null) > 0
     }
 
     private fun getShoppingNote(cursor: Cursor) = ShoppingNote(
