@@ -26,22 +26,12 @@ class NotesDB(context: Context) : SQLiteOpenHelper(context, "shopping_notes", nu
         db.execSQL(
             ("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
                     "'Compra Amazon', " +
-                    "'Cable HDMI', " +
+                    "'Cable HDMI\nFunda para el móvil', " +
                     System.currentTimeMillis() + ")")
         )
         db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
-                "'Compra viernes', " +
-                "'Cereales, atún y lentejas', " +
-                System.currentTimeMillis() + ")")
-        )
-        db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
-                "'Compra papelería', " +
-                "'Post-its y grapas', " +
-                System.currentTimeMillis() + ")")
-        )
-        db.execSQL(("INSERT INTO $TABLE_NAME (title, content, date) VALUES (" +
-                "'Compra para caseta', " +
-                "'Alcohol', " +
+                "'Compra de la semana', " +
+                "'Patatas\nHuevos\nAceitunas\nManzanas', " +
                 System.currentTimeMillis() + ")")
         )
     }
@@ -78,7 +68,7 @@ class NotesDB(context: Context) : SQLiteOpenHelper(context, "shopping_notes", nu
             put("content", note.content)
             put("date", System.currentTimeMillis())
         }
-        
+
         return writableDatabase.insert(TABLE_NAME, null, values) > -1
     }
 

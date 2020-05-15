@@ -20,8 +20,7 @@ class NewListActivity : AppCompatActivity() {
         buttonCancel.setOnClickListener { onBackPressed() }
         buttonSave.setOnClickListener {
             if (saveFile()) onBackPressed()
-            else toast("Se ha producido un error")
-            /* TODO: Traducir todos los se ha producido un error */
+            else toast(R.string.error)
         }
     }
 

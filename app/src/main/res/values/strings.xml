@@ -13,8 +13,8 @@
     <string name="input_shopping_list">Enter your shopping list here</string>
     <string name="save">Save</string>
     <!-- Dialog -->
-    <string name="dialog_title">Dialog title</string>
-    <string name="dialog_message">Dialog message</string>
     <string name="close">Close</string>
     <string name="delete">Delete</string>
+    <!-- Error -->
+    <string name="error">An error has occurred</string>
 </resources>

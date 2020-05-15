@@ -11,10 +11,10 @@
     <string name="list_name">Introduzca un nombre para la lista</string>
     <string name="label_shopping_list">Lista de la compra:</string>
     <string name="input_shopping_list">Introduzca aquí la lista de la compra</string>
-    <!-- Dialog -->
     <string name="save">Guardar</string>
-    <string name="dialog_title">Dialog title</string>
-    <string name="dialog_message">Dialog message</string>
+    <!-- Dialog -->
     <string name="close">Cerrar</string>
     <string name="delete">Eliminar</string>
+    <!-- Error -->
+    <string name="error">Se ha producido un error</string>
 </resources>
