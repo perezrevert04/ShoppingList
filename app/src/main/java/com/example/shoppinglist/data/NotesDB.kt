@@ -11,7 +11,7 @@ import com.example.shoppinglist.logic.ShoppingNote
 
 const val TABLE_NAME = "shopping_notes"
 
-class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes", null, 1), NotesDAO {
+class NotesDB(context: Context) : SQLiteOpenHelper(context, "shopping_notes", null, 1), NotesDAO {
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -72,12 +72,14 @@ class NotesDB(val context: Context) : SQLiteOpenHelper(context, "shopping_notes"
         }
     }
 
-    override fun add(note: ShoppingNote): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun new(): Int {
-        TODO("Not yet implemented")
+    override fun create(note: ShoppingNote): Boolean {
+        val values = ContentValues().apply {
+            put("title", note.title)
+            put("content", note.content)
+            put("date", System.currentTimeMillis())
+        }
+        
+        return writableDatabase.insert(TABLE_NAME, null, values) > -1
     }
 
     override fun delete(id: Int): Boolean {
